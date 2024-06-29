@@ -2,6 +2,7 @@
 {% block title %}{{ entry.title }} - {{ entry.author }}{% endblock %}
 
 {% block content %}
+    {#    TODO: Move CSS and JS to their own static files instead of inlines#}
     <style>
         /* Custom styles for the books, credit to civbooks.github.io */
         @font-face {
@@ -9,6 +10,7 @@
             src: url('https://civbooks.github.io/font/Minecraft-Regular.otf');
         }
 
+        {#TODO: move images and fonts to hosted staticly on site#}
         @font-face {
             font-family: 'minecraft pixel perfect';
             src: url('https://civbooks.github.io/font/Minecraft-Bold.ttf');
@@ -27,6 +29,7 @@
 
         .page {
             image-rendering: pixelated;
+
             background: url("https://civbooks.github.io/img/page.png") center;
             width: 292px;
             min-width: 292px;
@@ -39,11 +42,17 @@
 
         .page-content {
             position: absolute;
+
             top: 61px;
+
             left: 32px;
+
             white-space: pre-wrap;
+
             word-wrap: break-word;
+
             width: 232px;
+
         }
 
         .page-number {
@@ -51,20 +60,207 @@
             top: 30px;
             right: 36px;
             text-decoration: none;
-            {#color: rgba(0, 0, 0, 0.4);#}
+        {#color: rgba(0, 0, 0, 0.4);#}
         }
     </style>
+    <script>
+        // Huge credit and thanks to this answer on Stack Overflow https://stackoverflow.com/a/30313558 (in case of link rot, https://web.archive.org/web/20240629162520/https://stackoverflow.com/questions/30312601/translating-minecraft-color-codes-into-html/30313558#30313558)
+        (function () {
+
+            'use strict';
+
+            var currId = 0,
+                obfuscators = {},
+                alreadyParsed = [],
+                styleMap = {
+                    '§0': 'color:#000000',
+                    '§1': 'color:#0000AA',
+                    '§2': 'color:#00AA00',
+                    '§3': 'color:#00AAAA',
+                    '§4': 'color:#AA0000',
+                    '§5': 'color:#AA00AA',
+                    '§6': 'color:#FFAA00',
+                    '§7': 'color:#AAAAAA',
+                    '§8': 'color:#555555',
+                    '§9': 'color:#5555FF',
+                    '§a': 'color:#55FF55',
+                    '§b': 'color:#55FFFF',
+                    '§c': 'color:#FF5555',
+                    '§d': 'color:#FF55FF',
+                    '§e': 'color:#FFFF55',
+                    '§f': 'color:#FFFFFF',
+                    '§l': 'font-weight:bold',
+                    '§m': 'text-decoration:line-through',
+                    '§n': 'text-decoration:underline',
+                    '§o': 'font-style:italic'
+                };
+
+            function obfuscate(elem, string) {
+                var multiMagic,
+                    currNode,
+                    listLen,
+                    nodeI;
+
+                function randInt(min, max) {
+                    return Math.floor(Math.random() * (max - min + 1)) + min;
+                }
+
+                function replaceRand(string, i) {
+                    var randChar = String.fromCharCode(randInt(64, 95));
+                    return string.substr(0, i) + randChar + string.substr(i + 1, string.length);
+                }
+
+                function initMagic(el, str) {
+                    var i = 0,
+                        obsStr = str || el.innerHTML,
+                        strLen = obsStr.length;
+                    if (!strLen) return;
+                    obfuscators[currId].push(
+                        window.setInterval(function () {
+                            if (i >= strLen) i = 0;
+                            obsStr = replaceRand(obsStr, i);
+                            el.innerHTML = obsStr;
+                            i++;
+                        }, 0)
+                    );
+                }
+
+                if (string.indexOf('<br>') > -1) {
+                    elem.innerHTML = string;
+                    listLen = elem.childNodes.length;
+                    for (nodeI = 0; nodeI < listLen; nodeI++) {
+                        currNode = elem.childNodes[nodeI];
+                        if (currNode.nodeType === 3) {
+                            multiMagic = document.createElement('span');
+                            multiMagic.innerHTML = currNode.nodeValue;
+                            elem.replaceChild(multiMagic, currNode);
+                            initMagic(multiMagic);
+                        }
+                    }
+                } else {
+                    initMagic(elem, string);
+                }
+            }
+
+            function applyCode(string, codes) {
+                var elem = document.createElement('span'),
+                    obfuscated = false;
+
+                string = string.replace(/\x00/g, '');
+
+                codes.forEach(function (code) {
+                    elem.style.cssText += styleMap[code] + ';';
+                    if (code === '§k') {
+                        obfuscate(elem, string);
+                        obfuscated = true;
+                    }
+                });
+
+                if (!obfuscated) elem.innerHTML = string;
+
+                return elem;
+            }
+
+            function parseStyle(string) {
+                var finalPre = document.createElement('div'),
+                    codes = string.match(/§.{1}/g) || [],
+                    codesLen = codes.length,
+                    indexes = [],
+                    indexDelta,
+                    apply = [],
+                    strSlice,
+                    i;
+
+                if (!obfuscators[currId]) obfuscators[currId] = [];
+
+                // Do we really need this? This whole bit could be refactored possibly -pixl
+                string = string.replace(/\n|\\n/g, '<br>');
+
+                for (i = 0; i < codesLen; i++) {
+                    indexes.push(string.indexOf(codes[i]));
+                    string = string.replace(codes[i], '\x00\x00');
+                }
+
+                if (indexes[0] !== 0) {
+                    finalPre.appendChild(applyCode(string.substring(0, indexes[0]), []));
+                }
+
+                for (i = 0; i < codesLen; i++) {
+                    indexDelta = indexes[i + 1] - indexes[i];
+                    if (indexDelta === 2) {
+                        while (indexDelta === 2) {
+                            apply.push(codes[i]);
+                            i++;
+                            indexDelta = indexes[i + 1] - indexes[i];
+                        }
+                        apply.push(codes[i]);
+                    } else {
+                        apply.push(codes[i]);
+                    }
+                    if (apply.lastIndexOf('§r') > -1) {
+                        apply = apply.slice(apply.lastIndexOf('§r') + 1);
+                    }
+                    strSlice = string.substring(indexes[i], indexes[i + 1]);
+                    finalPre.appendChild(applyCode(strSlice, apply));
+                }
+
+                return finalPre;
+            }
+
+            function clearObfuscators(id) {
+                obfuscators[id].forEach(function (interval) {
+                    clearInterval(interval);
+                });
+                alreadyParsed[id] = [];
+                obfuscators[id] = [];
+            }
+
+            window.mineParse = function initParser(input) {
+                var parsed,
+                    i = currId;
+                if (i > 0) {
+                    while (i--) {
+                        if (alreadyParsed[i].nodeType) {
+                            if (!document.contains(alreadyParsed[i])) {
+                                clearObfuscators(i);
+                            }
+                        }
+                    }
+                }
+                parsed = parseStyle(input);
+                alreadyParsed.push(parsed);
+                currId++;
+                return {
+                    parsed: parsed,
+                    raw: parsed.innerHTML
+                };
+            };
+
+        }());</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var book = document.querySelector('.book');
+            var pages = book.querySelectorAll('.page');
+            pages.forEach(function (page) {
+                var content = page.querySelector('.page-content');
+                var parsed = mineParse(content.innerHTML);
+                content.innerHTML = '';
+                content.appendChild(parsed.parsed);
+            });
+        });
+    </script>
     <h2 class="text-2xl font-bold">{{ entry.title }}</h2>
     <div class='book'>
-    {% autoescape off %}
-        {% for item in entry.text %}
-            <div class="page">
-                <div href="#page-{{ forloop.counter }}" class="page-number">Page {{ forloop.counter }}
-                    of {{ forloop.revcounter0|add:forloop.counter }}</div>
-                <div class="page-content"><p class="text-grey-600">{{ item }}</p></div>
-            </div>
+        {% autoescape off %}
+            {% for item in entry.text %}
+                <div class="page">
+                    <div href="#page-{{ forloop.counter }}" class="page-number" style="color:#AAAAAA"><a
+                            href="#page-{{ forloop.counter }}">Page {{ forloop.counter }}
+                        of {{ forloop.revcounter0|add:forloop.counter }}</a></div>
+                    <div class="page-content"><p class="text-grey-600">{{ item }}</p></div>
+                </div>
 
-        {% endfor %}
-    {% endautoescape %}
+            {% endfor %}
+        {% endautoescape %}
     </div>
 {% endblock %}

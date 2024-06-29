@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{%  block title %}MaeStor - StoneworksMC{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles */
+
+        .neon-green {
+            color: #2ecc71;
+        }
+
+        .neon-green-hover:hover {
+            color: #2ecc71;
+            transition: color 0.4s ease;
+        }
+
+        .bg-neon-green {
+            background-color: #2ecc71;
+        }
+        /* Additional styles for enhanced appearance */
+
+        .bg-forest-green {
+            background-color: #16a085;
+        }
+
+        .search-input:focus,
+        .search-input:active {
+            outline: none;
+            box-shadow: 0 0 0 2px #2ecc71;
+        }
+        /* New elegant styles */
+
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        nav {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .featured-book,
+        .categories,
+        .search,
+        .new-arrivals {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 40px;
+        }
+
+        .book-card {
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+        }
+
+        footer {
+            background-color: #222;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 text-gray-800 font-sans">
+
+    <!-- Navigation -->
+    <nav class="bg-forest-green py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-lg font-bold px-5 text-white">MaeStor - StoneworksMC</h1>
+            <ul class="flex space-x-4">
+                <li><a href="#" class="neon-green-hover">Home</a></li>
+                <li><a href="#" class="neon-green-hover">Categories</a></li>
+                <li><a href="#" class="neon-green-hover">Upload</a></li>
+                <li><a href="#" class="neon-green-hover">About</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mx-auto py-8">
+        {% block content %}{% endblock %}
+    </div>
+    <div>
+        <p class="text-gray-200 opacity-80">christian is the best dev on stoneworks </p>
+    </div>
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-4 ">
+        <div class="container mx-auto text-center ">
+            <ul class="flex justify-center space-x-4 ">
+                <li><a href="# " class="neon-green-hover ">About Us</a></li>
+                <li><a href="# " class="neon-green-hover ">Privacy Policy</a></li>
+                <li><a href="# " class="neon-green-hover ">Terms of Service</a></li>
+                <li><a href="# " class="neon-green-hover ">Contact Us</a></li>
+            </ul>
+        </div>
+    </footer>
+
+</body>
+
+</html>

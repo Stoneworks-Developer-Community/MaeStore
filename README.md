@@ -28,9 +28,9 @@ B. Not widely available, and no longer produced (Copies of Copies) by the Author
 ## Adding books
 1. Open the /upload/ page.
 2. Upload a `.stendhal` file 
-   > [!IMPORTANT]
-   > Stendhal files are generated using the Stendhal mod for Minecraft 
-   > (Download the mod on [Modrinth](https://modrinth.com/mod/stendhal/versions))
+> [!IMPORTANT]
+> Stendhal files are generated using the Stendhal mod for Minecraft 
+> (Download the mod on [Modrinth](https://modrinth.com/mod/stendhal/versions))
 3. Press the "Upload" button.
 4. Check the /index/ page (You should automatically be redirected here after upload) 
 5. (Optional) Check out the archive/manual entry on the /admin/ page 

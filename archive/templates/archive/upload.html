@@ -1,0 +1,10 @@
+{% extends 'archive/base.html' %}
+{% block title %}Upload - StoneworksMC{% endblock %}
+
+{% block content %}
+<form method="post" action="{% url 'upload' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+{{ form }}
+<input type="submit" value="Upload">
+</form>
+{% endblock %}

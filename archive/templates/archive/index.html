@@ -7,7 +7,7 @@
         <h2 class="text-xl">{{ k.1 }}</h2>
         <ul class="list-style-type:disc;">
             {% for item in v %}
-                <li><a href='{% url "maestor-read" snowflake_id=item.id %}'
+                <li><a href='{% url "read" snowflake_id=item.id %}'
                        class="text-teal-400"><u>{{ item.title }}</u></a>, by <code>{{ item.author }}</code></li>
             {% endfor %}
         </ul>

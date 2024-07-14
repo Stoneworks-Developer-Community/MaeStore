@@ -134,6 +134,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MAESTOR_GENRES = {
+    "XXX": "Other",
     'FANT': 'Fantasy',
     'SF': 'Science Fiction',
     'HOR': 'Horror',
@@ -153,13 +154,13 @@ MAESTOR_GENRES = {
 }
 
 MAESTOR_WORLDS = {
-    "PAX": "Paxia",
-    "JAG": "Jagdas",
+    "ABEX": "Abexilas",
     "RATH": "Rathnir",
     "ELD": "Eldham",
     "KYL": "Kylorne",
-    "AKON": "Tremons: Akonanda",
     "KANA": "Tremons: Kanahulu",
-    "ABEX": "Abexilas",
+    "AKON": "Tremons: Akonanda",
+    "JAG": "Jagdas",
+    "PAX": "Paxia",
     "XXX": "Unknown"
 }

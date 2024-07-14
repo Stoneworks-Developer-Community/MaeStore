@@ -20,8 +20,9 @@ import archive.views
 urlpatterns = [
     path('admin/', admin.site.urls),
     # TODO: make archive URLS their own namespace and file
-    path('read/<int:snowflake_id>', archive.views.read, name='maestor-read'),
-    path('index/', archive.views.search),
+    path('read/<int:snowflake_id>', archive.views.read, name='read'),
+    path('index/', archive.views.index, name='index'),
+    path('upload/', archive.views.upload, name='upload'),
     path('search/', include('haystack.urls'))
 
 ]

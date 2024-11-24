@@ -1,7 +1,7 @@
 from django import forms
-from MaeStore.settings import MAESTOR_WORLDS, MAESTOR_GENRES
+from Testament.settings import TESTAMENT_WORLDS, TESTAMENT_GENRES
 
 class BookUploadForm(forms.Form):
     file = forms.FileField()
-    world = forms.ChoiceField(choices=MAESTOR_WORLDS)
-    genre = forms.ChoiceField(choices=MAESTOR_GENRES)
+    world = forms.ChoiceField(choices=TESTAMENT_WORLDS)
+    genre = forms.ChoiceField(choices=TESTAMENT_GENRES)

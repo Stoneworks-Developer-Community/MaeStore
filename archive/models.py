@@ -1,6 +1,6 @@
 from django.db import models
 from snowflake import Snowflake
-from MaeStore.settings import MAESTOR_GENRES, MAESTOR_WORLDS
+from Testament.settings import TESTAMENT_GENRES, TESTAMENT_WORLDS
 
 def new_id():
     return Snowflake().generate().id
@@ -10,8 +10,8 @@ class Book(models.Model):
     title = models.CharField(max_length=100)
     author = models.CharField(max_length=16)
     text = models.JSONField()
-    genre = models.CharField(max_length=100, choices=MAESTOR_GENRES)
-    world = models.CharField(max_length=100, choices=MAESTOR_WORLDS)
+    genre = models.CharField(max_length=100, choices=TESTAMENT_GENRES)
+    world = models.CharField(max_length=100, choices=TESTAMENT_WORLDS)
 
     def get_absolute_url(self):
         return f'/read/{self.id}'
